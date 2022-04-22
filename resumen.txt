@@ -1,0 +1,93 @@
+RESUMEN DEL CURSO DE HOLAMUNDO
+-------
+
+ls -a: listo repositorios ocultos (.git)
+
+FLUJO DE TRABAJO
+git add: seleccionando archivos y pasan a etapa "stage" (etapa intermedia para ver los cambios selecionados), podemos eliminar cambios selecccionados.
+git commit: pasamos archivos a la etapa commit
+git push: subimos archivos al servidor
+git status: muestra estado actual del repo
+
+-------
+OTROS
+git push: neviar confirmacion a la rama maestra/principal del repositorio remoto
+git remote: ver todos los repositorios remotos
+git checkout: crear ramas y navegar entre ellas
+git pull: fusionar cambios hechos en repo local
+-------
+
+
+PRUEBA: 
+1) git add archivo.txt o *.txt o . (todos, no hacerlo NUNCA)
+cambios) git add archivo2.txt archivo3.txt
+2) git commit -m "Mensaje con sentido"
+3) Modificamos archivo2.txt
+4) git status, luego git add, luego git commit (solo sin mensaje), nos abre vscode y en la primer linea escribimos el mensaje.
+5) rm archivo2.txt : borrar el archivo, luego git status, git add archivo2.txt, luego status...
+6) git commit m- "eliminando archivo 2", status!
+o git rm nombre archivo : nos ahorramos un paso, status 
+7) git restore --staged archivo.txt : eliminamos cambio pasado a etapa stage 
+8) ls : el archivo 1 fue eliminado, pero aun podemos recuperarlo -> git restore archivos.txt
+9) renombrar archivo : mv archivo.txt archivoRenombrado.txt -> git status -> git add archivo1.txt archivoRenombrado.txt -> git commit -m "renombrando archivo"
+o hacemos el paso completo (renombrar y pasar a stage): git mv archivo.txt archivoRenombrado2.txt
+
+------
+Variables de entorno
+1) Creamos archivo en VSC .env
+2) Escribimos variables: pass=123 user=mar
+- git status
+3) Creamos archivo en VSC .gitignore
+4) Escribimos .env en este nuevo archivo.
+- git status
+5) git add .gitignore
+6) git commit -m "agregando archivo .gitignore"
+
+------
+git status -s
+git add. gitignore
+git status -s -> lo que figura en M verde está en Stage, los que tienen ?? no fueron addeados aun
+git add archivo1.txt archivo2.txt
+git status -s -> devuelve A en verde (agregando)
+git commit -m "mostrando status control"
+------
+
+------
+modificamos archivos
+git status
+git diff: muestra los cambios literales no pasados a staged aun: las partes en rojo y sobreescritas de vuelta significan que se dio "enter", entonces agrega la misma linea pero con el \n en bits...
+- lo azul: @@ primer numero (comienza desde la x linea = version vieja), segunda parte: cambios hechos desde la x linea, y la cantidad de cambios (lineas) @@
+- para salir de la pantalla: presiono letra q
+git add archivo 2...
+git diff: sin cambios...
+git diff --staged: cambios hechos que se encuentren en etapa stage.
+git log: revisar historial o uso git log --oneline -> con hashes de commit más ordenado nos lo muestra, y los mensajes al hace git commit -m ...
+- Los cambios se dan desde un punto de entrada anterior... 
+- Existe una rama principal, y ramas bifurcadas, una vez que desarrollemos nuestra funcionalidad, solicitamos un "merge", para volver a la rama principal
+restauramos: git restore --staged archivo1.txt archivo2.txt
+git status
+descartar los cambios: git restore archivo1.txt archivo2.txt
+------
+
+------
+Antes de crear rama nueva, verificar rama actual: git branch -> main
+crear rama: git checkout -b "nombre rama" -> escribimos luego de -b features/nombre-funcionalidad o el numero de ticket a arreglar: SS-4515 por ejemeplo... pero ahora escribimos ramab
+gitbranch: main y ramab...
+realizamos cambios en archivos.
+status, add, commit
+ver historial donde trabajamos: git log --oneline, devuelve: HEAD == me encuentro en la cabeza de -> nombre-rama (ramab) con su commit
+cat archivo2.txt: muestra contenido del archivo
+git checkout main
+cat archivo2.txt: contiene solo chanchito feliz -> ahora tengo una version vieja ya que no están hechos los cambios.
+traer cambios de ramab a main: escribimos en rama main: git merge "nombre-rama"
+cat archivo2.txt
+------
+
+------
+Subir codigo a la nube : github
+Creo repositorio: prueba-github
+Copio ante ultima linea: git remote add origin https://github.com/marcosgrahl30/prueba-github.git : git remote significa para indicar si tenemos un servidor remoto para subir cambios, add origin significa de donde obtener el codigo y a donde subirlo url: almacenado
+volvemos y copiamos: git push -u origin main -> para subir cambios respecto a la rama donde trabajamos, pero tenemos que indicar que queremos crear la rama main con -u ya que no está creada, origin en donde se va crear, nos pide que le demos nuestro nombre de usuario para github y pass: no es la de github, sino hay que obtener una key: vamos a settings -> developer settings -> personal acceses tokens -> generate new token, nombre de token y que expire en 30 dias, alcance: repo (todo), generate token, nos figura el token y dos cuadrados azules, clickeamos ahi y lo copia: luego lo pegamos en pass de gitbash -> codigo subido. 
+- volvemos al repo de github, f5, y vemos los archivos!!
+- Para agregar nuevo codigo, modificamos texto, git add, git commit, y luego git push. 
+- Si creamos rama y no queremos hacer aun un merge con master y si queremos que este en el repo: git checkout -b ramac, git push -u origin ramac -> crea rama en repositorio.
